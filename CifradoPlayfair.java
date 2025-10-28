@@ -9,7 +9,14 @@ public static ArrayList <Character> ClaveLetrasUnicas (String palabra){
     ArrayList<Character> Clave = new ArrayList <>();
         
     palabra = palabra.toUpperCase();
-    
+    //Eliminar caracteres NO alfabeticos
+    String temp = "";
+    for(int i = 0; i < palabra.length(); i++) {
+        if(Character.isAlphabetic(palabra.charAt(i))) {
+            temp += palabra.charAt(i);
+        }
+    }
+    palabra = temp;
     for(int i=0; i<palabra.length(); i++){
             if(!Clave.contains(palabra.charAt(i)) || i==0){
                 switch (palabra.charAt(i)) {
