@@ -8,14 +8,18 @@ public static ArrayList <Character> ClaveLetrasUnicas (String palabra){
     
     ArrayList<Character> Clave = new ArrayList <>();
         
+    palabra = palabra.toUpperCase();
+    
     for(int i=0; i<palabra.length(); i++){
             if(!Clave.contains(palabra.charAt(i)) || i==0){
                 switch (palabra.charAt(i)) {
-                    case 'j':
-                        Clave.add('i');
+                    case 'J':
+                        Clave.add('I');
                         break;
-                    case 'ñ':
-                        Clave.add('n');
+                    case 'Ñ':
+                        Clave.add('N');
+                        break;
+                    case ' ':
                         break;
                     default:
                         Clave.add(palabra.charAt(i));
@@ -31,7 +35,7 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
     ArrayList<Character> Matriz5x5 = new ArrayList <>();
         
       for(int i=0; i<clave.size(); i++){
-            Matriz5x5.add(clave.get(i));
+         Matriz5x5.add(clave.get(i));
         }
         
       for(int i=0; i<abecedario.length; i++){
@@ -43,7 +47,7 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
     
     public static void main(String[] args) {
         Scanner sc = new Scanner (System.in);
-        char[] abecedario =  {'a','b','c','d','e','f','g','h','i','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        char[] abecedario =  {'A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         
         //se pide la clave y el mensaje
         System.out.println("Ingresa una clave:");
@@ -91,5 +95,7 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
                 System.out.print(y + " ");
             }
         }
+        
+        
     }
 }
