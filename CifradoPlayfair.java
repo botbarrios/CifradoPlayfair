@@ -3,7 +3,28 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class CifradoPlayfair {
-
+public static String procesarLinea(String linea) {
+    
+    String res = "";
+    linea = linea.toUpperCase();
+    
+    for(int i = 0; i < linea.length(); i++) {
+        switch (linea.charAt(i)) {
+                    case 'J':
+                         res += 'I';
+                        break;
+                    case 'Ñ':
+                        res += 'N';
+                        break;
+                    case ' ':
+                        break;
+                    default:
+                        if(Character.isAlphabetic(linea.charAt(i))) res += linea.charAt(i);
+                        break;
+        }
+    }
+    return res;
+}
 public static ArrayList <Character> ClaveLetrasUnicas (String palabra){
     
     ArrayList<Character> Clave = new ArrayList <>();
@@ -36,7 +57,38 @@ public static ArrayList <Character> ClaveLetrasUnicas (String palabra){
       }
     return Clave;
    }
-
+public static ArrayList<String> procesarMensaje(String mensaje) {
+    mensaje = procesarLinea(mensaje);
+    ArrayList<String> res = new ArrayList<>();
+    
+    String aux= "";
+    for(int i = 0; i < mensaje.length(); i++) {
+        if(aux.length() > 0 && aux.length() % 2 != 0 && mensaje.charAt(i - 1) == mensaje.charAt(i)) {
+            aux += "X";
+        } 
+        aux += mensaje.charAt(i);
+        
+    }
+    System.out.println(aux);
+    if(aux.length() % 2 != 0) aux += "X";
+    /*
+        "abbacxcx"
+                i
+         "ab",
+         "ba",
+         "cx",
+         "cx"
+    */
+    String par = "";
+    for(int i = 0; i < aux.length(); i++) {
+        par += aux.charAt(i);
+        if(i % 2 != 0) {
+            res.add(par);
+            par = "";
+        }
+    }
+    return res;
+}
 public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave, char [] abecedario){
     
     ArrayList<Character> Matriz5x5 = new ArrayList <>();
@@ -53,6 +105,9 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
 }  
     
     public static void main(String[] args) {
+        ArrayList<String> test = procesarMensaje("abdabfbbbbIIIIKKKKJJJ");
+        System.out.println(test);
+        /*
         Scanner sc = new Scanner (System.in);
         char[] abecedario =  {'A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         
@@ -102,7 +157,7 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
                 System.out.print(y + " ");
             }
         }
-        
+        */
         
     }
 }
