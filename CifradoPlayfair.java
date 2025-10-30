@@ -1,6 +1,8 @@
 package victor.cifradoplayfair;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class CifradoPlayfair {
 public static String procesarLinea(String linea) {
@@ -69,16 +71,9 @@ public static ArrayList<String> procesarMensaje(String mensaje) {
         aux += mensaje.charAt(i);
         
     }
-    System.out.println(aux);
+    
     if(aux.length() % 2 != 0) aux += "X";
-    /*
-        "abbacxcx"
-                i
-         "ab",
-         "ba",
-         "cx",
-         "cx"
-    */
+    
     String par = "";
     for(int i = 0; i < aux.length(); i++) {
         par += aux.charAt(i);
@@ -103,11 +98,40 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
         }
     return Matriz5x5;
 }  
-    
-    public static void main(String[] args) {
-        ArrayList<String> test = procesarMensaje("abdabfbbbbIIIIKKKKJJJ");
-        System.out.println(test);
-        /*
+    public static String encriptaPar(String par, HashMap<Character,int[]> mapa,char[][]matrix) {
+        char a = par.charAt(0);
+char b = par.charAt(1);
+int[] coordsA = mapa.get(a).clone();  // ← Clonar el arreglo
+int[] coordsB = mapa.get(b).clone();  // ← Clonar el arreglo
+
+System.out.println(par);
+System.out.println(Arrays.toString(coordsA));
+System.out.println(Arrays.toString(coordsB));
+
+if(coordsA[0] == coordsB[0]) { // MISMA FILA
+    System.out.println("MISMA FILA");
+    coordsA[1]++;
+    coordsB[1]++;
+    if(coordsA[1] == 5) coordsA[1] = 0;
+    if(coordsB[1] == 5) coordsB[1] = 0;
+} else if(coordsA[1] == coordsB[1]) { // MISMA COLUMNA
+    System.out.println("MISMA COL");
+    coordsA[0]++;
+    coordsB[0]++;
+    if(coordsA[0] == 5) coordsA[0] = 0;
+    if(coordsB[0] == 5) coordsB[0] = 0;    
+} else {
+    int temp = coordsA[1];
+    coordsA[1] = coordsB[1];
+    coordsB[1] = temp;
+}
+
+String res = "";
+res += matrix[coordsA[0]][coordsA[1]];
+res += matrix[coordsB[0]][coordsB[1]];
+return res;
+    }
+    public static void mainEncrypt() {
         Scanner sc = new Scanner (System.in);
         char[] abecedario =  {'A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         
@@ -120,31 +144,17 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
         //se utiliza la funcion para eliminar letras repetidas de la clave
         ArrayList <Character> ClavePrime;
         ClavePrime = ClaveLetrasUnicas(clave);
-        System.out.println(ClavePrime);
         
         //se prepara el mensaje para despues procesarlo dentro de la matriz 5x5
-        if(Mensaje.length()%2!=0)Mensaje += "x";
-        System.out.println(Mensaje);
-        char [][] MensajePrime = new char [Mensaje.length()/2][2];
+        ArrayList<String> MensajePrime = procesarMensaje(Mensaje);
         
-        int cont = 0;
-        for(int i=0; i<MensajePrime.length; i++)
-            for(int j=0; j<MensajePrime[i].length; j++){
-               MensajePrime[i][j] = Mensaje.charAt(cont);
-              cont++;
-            }
-       
-        cont = 0;
         
-        for(char[]x: MensajePrime)
-            for(char y: x)
-                System.out.println(y);
         
         ArrayList <Character> Lista;
         Lista = MatrizPreparada(ClavePrime, abecedario);
         
         char[][] matrix = new char[5][5];
-        
+        int cont = 0;
         for(int i=0; i<matrix.length; i++)
             for(int j=0; j<matrix[i].length; j++){
                 matrix[i][j] = Lista.get(cont);
@@ -157,7 +167,55 @@ public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave
                 System.out.print(y + " ");
             }
         }
-        */
+        
+        HashMap<Character, int[]> map = new HashMap<>();
+        System.out.println("");
+        for(int i = 0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix[i].length; j++) {
+                map.put(matrix[i][j], new int[]{i,j});
+                int[] a = map.get(matrix[i][j]);
+                System.out.print(matrix[i][j] + " :");
+                System.out.print(Arrays.toString(a)); 
+                System.out.println("");
+            }
+        }
+        
+        ArrayList<String> result = new ArrayList<String>();
+        for(String par:MensajePrime) {
+            result.add(encriptaPar(par,map,matrix));
+        }
+        System.out.println(result);
+        
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+       System.out.println("----------------");
+            System.out.println("CIFRADO PLAYFAIR");
+            System.out.println("BY Raul, Ronald");
+            System.out.println("and Victor");
+            System.out.println("----------------");
+        System.out.println("");
+            System.out.println("Escoje una opción:");
+            System.out.println("1- Encriptar");
+            System.out.println("2- Decriptar");
+            System.out.println("3- Exit");
+        boolean corriendo = true;
+        while(corriendo) {
+            
+            
+            
+            int opcion = sc.nextInt();
+            switch(opcion) {
+                case 1:
+                    mainEncrypt();
+                    break;
+                case 2:
+                    System.out.println("No existe lol");
+                    break;
+                default:
+                    return;
+            }
+        }
         
     }
 }
