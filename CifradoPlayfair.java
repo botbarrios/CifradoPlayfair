@@ -1,169 +1,36 @@
 package victor.cifradoplayfair;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class CifradoPlayfair {
-public static String procesarLinea(String linea) {
     
-    String res = "";
-    linea = linea.toUpperCase();
-    
-    for(int i = 0; i < linea.length(); i++) {
-        switch (linea.charAt(i)) {
-                    case 'J':
-                         res += 'I';
-                        break;
-                    case 'Ñ':
-                        res += 'N';
-                        break;
-                    case ' ':
-                        break;
-                    default:
-                        if(Character.isAlphabetic(linea.charAt(i))) res += linea.charAt(i);
-                        break;
-        }
-    }
-    return res;
-}
-public static ArrayList <Character> ClaveLetrasUnicas (String palabra){
-    
-    ArrayList<Character> Clave = new ArrayList <>();
-        
-    palabra = palabra.toUpperCase();
-    //Eliminar caracteres NO alfabeticos
-    String temp = "";
-    for(int i = 0; i < palabra.length(); i++) {
-        if(Character.isAlphabetic(palabra.charAt(i))) {
-            temp += palabra.charAt(i);
-        }
-    }
-    palabra = temp;
-    for(int i=0; i<palabra.length(); i++){
-            if(!Clave.contains(palabra.charAt(i)) || i==0){
-                switch (palabra.charAt(i)) {
-                    case 'J':
-                        Clave.add('I');
-                        break;
-                    case 'Ñ':
-                        Clave.add('N');
-                        break;
-                    case ' ':
-                        break;
-                    default:
-                        Clave.add(palabra.charAt(i));
-                        break;
-                }
-        }
-      }
-    return Clave;
-   }
-public static ArrayList<String> procesarMensaje(String mensaje) {
-    mensaje = procesarLinea(mensaje);
-    ArrayList<String> res = new ArrayList<>();
-    
-    String aux= "";
-    for(int i = 0; i < mensaje.length(); i++) {
-        if(aux.length() > 0 && aux.length() % 2 != 0 && mensaje.charAt(i - 1) == mensaje.charAt(i)) {
-            aux += "X";
-        } 
-        aux += mensaje.charAt(i);
-        
-    }
-    
-    if(aux.length() % 2 != 0) aux += "X";
-    
-    String par = "";
-    for(int i = 0; i < aux.length(); i++) {
-        par += aux.charAt(i);
-        if(i % 2 != 0) {
-            res.add(par);
-            par = "";
-        }
-    }
-    return res;
-}
-public static ArrayList <Character> MatrizPreparada (ArrayList <Character> clave, char [] abecedario){
-    
-    ArrayList<Character> Matriz5x5 = new ArrayList <>();
-        
-      for(int i=0; i<clave.size(); i++){
-         Matriz5x5.add(clave.get(i));
-        }
-        
-      for(int i=0; i<abecedario.length; i++){
-            if(!Matriz5x5.contains(abecedario[i]))
-                Matriz5x5.add(abecedario[i]);
-        }
-    return Matriz5x5;
-}  
-    public static String encriptaPar(String par, HashMap<Character,int[]> mapa,char[][]matrix) {
-        char a = par.charAt(0);
-char b = par.charAt(1);
-int[] coordsA = mapa.get(a).clone();  // ← Clonar el arreglo
-int[] coordsB = mapa.get(b).clone();  // ← Clonar el arreglo
-
-System.out.println(par);
-System.out.println(Arrays.toString(coordsA));
-System.out.println(Arrays.toString(coordsB));
-
-if(coordsA[0] == coordsB[0]) { // MISMA FILA
-    System.out.println("MISMA FILA");
-    coordsA[1]++;
-    coordsB[1]++;
-    if(coordsA[1] == 5) coordsA[1] = 0;
-    if(coordsB[1] == 5) coordsB[1] = 0;
-} else if(coordsA[1] == coordsB[1]) { // MISMA COLUMNA
-    System.out.println("MISMA COL");
-    coordsA[0]++;
-    coordsB[0]++;
-    if(coordsA[0] == 5) coordsA[0] = 0;
-    if(coordsB[0] == 5) coordsB[0] = 0;    
-} else {
-    int temp = coordsA[1];
-    coordsA[1] = coordsB[1];
-    coordsB[1] = temp;
-}
-
-String res = "";
-res += matrix[coordsA[0]][coordsA[1]];
-res += matrix[coordsB[0]][coordsB[1]];
-return res;
-    }
     public static void mainEncrypt() {
-        Scanner sc = new Scanner (System.in);
-        char[] abecedario =  {'A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        Scanner sc = new Scanner(System.in);
+        char[] abecedario = {'A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         
-        //se pide la clave y el mensaje
         System.out.println("Ingresa una clave:");
         String clave = sc.nextLine();
         System.out.println("Ingresa el mensaje a encriptar:");
         String Mensaje = sc.nextLine();
         
-        //se utiliza la funcion para eliminar letras repetidas de la clave
-        ArrayList <Character> ClavePrime;
-        ClavePrime = ClaveLetrasUnicas(clave);
-        
-        //se prepara el mensaje para despues procesarlo dentro de la matriz 5x5
-        ArrayList<String> MensajePrime = procesarMensaje(Mensaje);
-        
-        
-        
-        ArrayList <Character> Lista;
-        Lista = MatrizPreparada(ClavePrime, abecedario);
+        ArrayList<Character> ClavePrime = encriptarClass.ClaveLetrasUnicas(clave);
+        ArrayList<String> MensajePrime = encriptarClass.procesarMensaje(Mensaje);
+        ArrayList<Character> Lista = encriptarClass.MatrizPreparada(ClavePrime, abecedario);
         
         char[][] matrix = new char[5][5];
         int cont = 0;
-        for(int i=0; i<matrix.length; i++)
-            for(int j=0; j<matrix[i].length; j++){
+        for(int i = 0; i < matrix.length; i++)
+            for(int j = 0; j < matrix[i].length; j++) {
                 matrix[i][j] = Lista.get(cont);
                 cont++;
             }
         
-        for(char[]x: matrix){
+        for(char[] x : matrix) {
             System.out.println();
-            for(char y: x){
+            for(char y : x) {
                 System.out.print(y + " ");
             }
         }
@@ -172,7 +39,7 @@ return res;
         System.out.println("");
         for(int i = 0; i < matrix.length; i++) {
             for(int j = 0; j < matrix[i].length; j++) {
-                map.put(matrix[i][j], new int[]{i,j});
+                map.put(matrix[i][j], new int[]{i, j});
                 int[] a = map.get(matrix[i][j]);
                 System.out.print(matrix[i][j] + " :");
                 System.out.print(Arrays.toString(a)); 
@@ -181,29 +48,27 @@ return res;
         }
         
         ArrayList<String> result = new ArrayList<String>();
-        for(String par:MensajePrime) {
-            result.add(encriptaPar(par,map,matrix));
+        for(String par : MensajePrime) {
+            result.add(encriptarClass.encriptaPar(par, map, matrix));
         }
         System.out.println(result);
-        
     }
+    
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-       System.out.println("----------------");
-            System.out.println("CIFRADO PLAYFAIR");
-            System.out.println("BY Raul, Ronald");
-            System.out.println("and Victor");
-            System.out.println("----------------");
+        System.out.println("----------------");
+        System.out.println("CIFRADO PLAYFAIR");
+        System.out.println("BY Raul, Ronald");
+        System.out.println("and Victor");
+        System.out.println("----------------");
         System.out.println("");
-            System.out.println("Escoje una opción:");
-            System.out.println("1- Encriptar");
-            System.out.println("2- Decriptar");
-            System.out.println("3- Exit");
+        System.out.println("Escoje una opción:");
+        System.out.println("1- Encriptar");
+        System.out.println("2- Decriptar");
+        System.out.println("3- Exit");
+        
         boolean corriendo = true;
         while(corriendo) {
-            
-            
-            
             int opcion = sc.nextInt();
             switch(opcion) {
                 case 1:
@@ -216,6 +81,5 @@ return res;
                     return;
             }
         }
-        
     }
 }
