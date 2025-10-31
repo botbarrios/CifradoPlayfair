@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class encriptarClass {
+public class decriptarClass {
     
     public static String procesarLinea(String linea) {
         String res = "";
@@ -99,7 +99,7 @@ public class encriptarClass {
         return Matriz5x5;
     }
     
-    public static String encriptaPar(String par, HashMap<Character, int[]> mapa, char[][] matrix) {
+    public static String decriptaPar(String par, HashMap<Character, int[]> mapa, char[][] matrix) {
         char a = par.charAt(0);
         char b = par.charAt(1);
         int[] coordsA = mapa.get(a).clone();
@@ -107,15 +107,15 @@ public class encriptarClass {
         
         
         if(coordsA[0] == coordsB[0]) { // MISMA FILA
-            coordsA[1]++;
-            coordsB[1]++;
-            if(coordsA[1] == 5) coordsA[1] = 0;
-            if(coordsB[1] == 5) coordsB[1] = 0;
+            coordsA[1]--;
+            coordsB[1]--;
+            if(coordsA[1] == -1) coordsA[1] = 4;
+            if(coordsB[1] == -1) coordsB[1] = 4;
         } else if(coordsA[1] == coordsB[1]) { // MISMA COLUMNA
-            coordsA[0]++;
-            coordsB[0]++;
-            if(coordsA[0] == 5) coordsA[0] = 0;
-            if(coordsB[0] == 5) coordsB[0] = 0;    
+            coordsA[0]--;
+            coordsB[0]--;
+            if(coordsA[0] == -1) coordsA[0] = 4;
+            if(coordsB[0] == -1) coordsB[0] = 4;    
         } else {
             int temp = coordsA[1];
             coordsA[1] = coordsB[1];
